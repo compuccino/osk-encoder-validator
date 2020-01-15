@@ -1,0 +1,11 @@
+version: '3.5'
+services:
+  harmancc_mysql:
+    image: registry.oskdev.de:5000/encoder-validator
+    container_name: encoder-validator
+    hostname: encoder-validator
+    network_mode: host
+    volumes:
+      - ./validation-config:/validation-config
+      - ./videos:/videos
+      - ./app:/var/www/app
