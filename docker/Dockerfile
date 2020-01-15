@@ -6,7 +6,7 @@ RUN mkdir /root/libsrt
 ADD libsrt /root/libsrt
 
 RUN apt-get -y update && \
-    apt-get install -y wget nano mediainfo git build-essential yasm pkg-config \
+    apt-get install -y wget php-yaml nano mediainfo git build-essential yasm pkg-config \
                        libssl-dev libchromaprint-dev frei0r-plugins-dev libmpg123-0 libmpg123-dev libgnutls28-dev libopencv-dev ladspa-sdk libiec61883-dev libavc1394-dev libass-dev libbluray-dev libbs2b-dev libcaca-dev libdc1394-22-dev libdrm-dev flite1-dev libgme-dev libgsm1-dev libmp3lame-dev libopencv-dev libopenjp2-7-dev libopus-dev libpulse-dev librsvg2-dev librubberband-dev libshine-dev libsnappy-dev libsoxr-dev libspeex-dev libtwolame-dev libssh-dev libtheora-dev libvorbis-dev libvpx-dev libwavpack-dev libwebp-dev libx265-dev libxml2-dev libxvidcore-dev libx264-dev libzvbi-dev libopenal-dev libglew-dev libomxil-bellagio-dev libcdio-paranoia-dev libsdl2-dev && \
     dpkg -i /root/libsrt/libsrt1_1.3.2-1_amd64.deb /root/libsrt/libsrt-dev_1.3.2-1_amd64.deb && \
     git clone https://github.com/FFmpeg/FFmpeg /root/ffmpeg

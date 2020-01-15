@@ -10,6 +10,14 @@ if (count(glob('/videos/*.mp4')) != count(glob('/videos/*.json'))) {
   };
 }
 
+foreach (glob('/videos/*.ts') as $file) {
+  unlink($file);
+}
+
+foreach (glob('/videos/*.flv') as $file) {
+  unlink($file);
+}
+
 if (file_exists('/tmp/listening-srt')) {
   unlink('/tmp/listening-srt');
 }

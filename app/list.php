@@ -9,4 +9,6 @@ foreach (glob('/videos/*.json') as $file) {
   ];
 }
 
-echo json_encode($list);
+$reverse = array_reverse($list);
+
+echo json_encode($reverse);

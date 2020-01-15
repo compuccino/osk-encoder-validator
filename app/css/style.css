@@ -5,3 +5,8 @@
 .frame-info {
   cursor: pointer;
 }
+
+.table-frame {
+  height: 600px;
+  overflow-y: scroll;
+}

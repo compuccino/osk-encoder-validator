@@ -1,4 +1,5 @@
 <?php
+  include('includes/realvalue.php');
   if (!isset($_GET['id']) || !file_exists('/videos/test-' . $_GET['id'] . '.json')) {
     echo "This is not a valid run";
     exit;
@@ -45,9 +46,10 @@
                 </thead>
                 <tbody>
                 <?php foreach ($data as $key => $value) { ?>
-                  <tr id="<?php echo md5($key); ?>">
+                  
+                  <tr id="<?php echo camelCase($header . ' ' . $key); ?>">
                     <td class="key"><?php echo $key; ?></td>
-                    <td class="value"><?php echo $value; ?></td>
+                    <td class="value"><?php echo getRealValue($header . ' ' . $key, $value); ?></td>
                     <td class="test-value"></td>
                   </tr>
                 <?php } ?>
@@ -61,33 +63,36 @@
               <h5><?php echo ucfirst($header); ?> Streams</h5>
               <?php foreach($data as $stream_id => $stream_data) { ?>
                 <h6>Stream #<?php echo $stream_id; ?></h6>
-                <table class="table table-hover table-striped">
-                <thead>
-                  <tr>
-                  <th scope="col" style="width: 20%">Frame #</th>
-                  <th scope="col" style="width: 20%">Frame Type</th>
-                  <th scope="col" style="width: 20%">PTS Time</th>
-                  <th scope="col" style="width: 20%">DTS Time</th>
-                  <th scope="col" style="width: 20%">Detail Info</th>
-                </thead>
-                <tbody>
-                <?php foreach($stream_data as $key => $frame) { ?>
-                  <tr id="<?php echo $header . '-' . $stream_id . '-' . $key; ?>">
-                    <?php
-                      $frame_type = isset($frame['pict_type']) ? $frame['pict_type'] : $frame['media_type'];
-                      if ($frame_type == 'I') {
-                        $frame_type = 'Key Frame (I)';
-                      }
-                    ?>
-                    <td><?php echo ($key+1); ?></td>
-                    <td><?php echo $frame_type ?></td>
-                    <td><?php echo $frame['pkt_pts_time']; ?></td>
-                    <td><?php echo $frame['pkt_dts_time']; ?></td>
-                    <td class="frame-info" data-id="<?php echo $header . '-' . $stream_id . '-' . $key; ?>">Detail Info</td>
-                  </tr>
-                <?php } ?>
-                </tbody>
-                </table>
+                <div class="table-frame">
+                  <table class="table table-hover table-striped">
+                  <thead>
+                    <tr>
+                    <th scope="col" style="width: 20%">Frame #</th>
+                    <th scope="col" style="width: 20%">Frame Type</th>
+                    <th scope="col" style="width: 20%">PTS Time</th>
+                    <th scope="col" style="width: 20%">DTS Time</th>
+                    <th scope="col" style="width: 20%">Detail Info</th>
+                  </thead>
+                  <tbody>
+                  <?php foreach($stream_data as $key => $frame) { ?>
+                    <tr id="<?php echo $header . '-' . $stream_id . '-' . $key; ?>">
+                      <?php
+                        $frame_type = isset($frame['pict_type']) ? $frame['pict_type'] : $frame['media_type'];
+                        if ($frame_type == 'I') {
+                          $frame_type = 'Key Frame (I)';
+                        }
+                      ?>
+                      <td><?php echo ($key+1); ?></td>
+                      <td><?php echo $frame_type ?></td>
+                      <td><?php echo $frame['pkt_pts_time']; ?></td>
+                      <td><?php echo $frame['pkt_dts_time']; ?></td>
+                      <td class="frame-info" data-id="<?php echo $header . '-' . $stream_id . '-' . $key; ?>">Detail Info</td>
+                    </tr>
+                  <?php } ?>
+                  </tbody>
+                  </table>
+                </div>
+                <hr />
               <?php } ?>
             <?php } ?>
 
