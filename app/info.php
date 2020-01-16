@@ -36,7 +36,9 @@
           Your browser does not support the video tag.
           </video>
           <a href="" class="btn btn-primary btn-lg btn-block" href=/videos/test-<?php echo $_GET['id']; ?>.mp4" download="test-<?php echo $_GET['id']; ?>.mp4">Download Video</a>
+          <hr/>
           <h2>Mediainfo</h2>
+          <hr/>
             <?php foreach ($info['mediainfo'] as $header => $data) { ?>
               <h5><?php echo $header; ?></h5>
               <table class="table table-hover table-striped">
@@ -53,9 +55,9 @@
                 </tbody>
                 </table>
             <?php } ?>
-            
+            <hr/>
             <h2>Frame-by-Frame Information</h2>
-
+            <hr/>
             <?php foreach($info['ffprobe'] as $header => $data) { ?>
               <h5><?php echo ucfirst($header); ?> Streams</h5>
               <?php foreach($data as $stream_id => $stream_data) { ?>
