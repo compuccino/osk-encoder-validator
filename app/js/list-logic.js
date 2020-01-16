@@ -51,11 +51,19 @@ function cancelTest() {
 function checkList() {
   $.getJSON("/list.php", function( json ) {
     var html = '';
-    for (row of json) {
-      html = html + '<tr><td>' + row.number + '</td><td>' + row.date + '</td><td><a href="info.php?id=' + row.number + '">More info</a></td>';
+    for (row of json.list) {
+      var link = '/info.php?id=' + row.number;
+      html = html + '<tr><td>' + row.number + '</td><td>' + row.date + '</td><td>';
+      html = html + '<div class="btn-group" role="group" aria-label="Button group with nested dropdown"><button type="button" class="btn btn-secondary"><a href="' + link + '">More Info</a></button>';
+      html = html + '<div class="btn-group" role="group"><button id="btnGroupDrop' + row.number + '" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+      html = html + '</button><div class="dropdown-menu" aria-labelledby="btnGroupDrop' + row.number + '">';
+      for (validation of json.validations) {
+        html = html + '<a class="dropdown-item" href="' + link + '&validate=' + validation + '">' + validation + '</a>';
+      }
+      html = html + '</div></div></div></td></tr>';
     }
     $('#result-set tbody').html(html);
-    setTimeout(checkList, 5000);
+    setTimeout(checkList, 20000);
   });
 }
 

@@ -1,5 +1,5 @@
 <?php
-  include('includes/realvalue.php');
+  include('includes/test.php');
   if (!isset($_GET['id']) || !file_exists('/videos/test-' . $_GET['id'] . '.json')) {
     echo "This is not a valid run";
     exit;
@@ -9,6 +9,7 @@
     echo "This encoding is totally corrupt";
     exit;
   }
+  $test = new test();
 ?>
 <!doctype html>
 <html lang="en">
@@ -34,6 +35,7 @@
             <source src="/videos/test-<?php echo $_GET['id']; ?>.mp4" type="video/mp4">
           Your browser does not support the video tag.
           </video>
+          <a href="" class="btn btn-primary btn-lg btn-block" href=/videos/test-<?php echo $_GET['id']; ?>.mp4" download="test-<?php echo $_GET['id']; ?>.mp4">Download Video</a>
           <h2>Mediainfo</h2>
             <?php foreach ($info['mediainfo'] as $header => $data) { ?>
               <h5><?php echo $header; ?></h5>
@@ -46,12 +48,7 @@
                 </thead>
                 <tbody>
                 <?php foreach ($data as $key => $value) { ?>
-                  
-                  <tr id="<?php echo camelCase($header . ' ' . $key); ?>">
-                    <td class="key"><?php echo $key; ?></td>
-                    <td class="value"><?php echo getRealValue($header . ' ' . $key, $value); ?></td>
-                    <td class="test-value"></td>
-                  </tr>
+                  <?php echo $test->testValue($header, $key, $value); ?>
                 <?php } ?>
                 </tbody>
                 </table>

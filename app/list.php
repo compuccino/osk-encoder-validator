@@ -9,6 +9,11 @@ foreach (glob('/videos/*.json') as $file) {
   ];
 }
 
+$validations = [];
+foreach (glob('/validation-config/*.yaml') as $file) {
+  $validations[] = str_replace(['.yaml', '/validation-config/'], '', $file);
+}
+
 $reverse = array_reverse($list);
 
-echo json_encode($reverse);
+echo json_encode(['list' => $reverse, 'validations' => $validations]);
