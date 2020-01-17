@@ -1,0 +1,60 @@
+video:
+  format:
+    and:
+      - or:
+        - exact: avc
+        - exact: h264
+      - not-exact: av1
+  formatProfile:
+    and:
+      - or:
+        - contains: 5.1
+        - contains: 4.1
+      - contains: high
+  duration:
+    and:
+      - min: 28
+      - max: 32
+  bitRateMode:
+    exact: constant
+  bitRate:
+    and:
+      - min: 7
+      - max: 9
+  width:
+    exact: 1920
+  height:
+    exact: 1080
+  frameRate:
+    exact: 25
+  minimumFrameRate:
+    and:
+      - min: 24
+      - max: 25
+  maximumFrameRate:
+    and:
+      - min: 25
+      - max: 26
+  colorSpace:
+    contains: yuv
+  chromaSubsampling:
+    exact: "4:2:0"
+audio:
+  format:
+    and:
+      - contains: aac
+      - not-exact: hd-aac
+  duration:
+    and:
+      - min: 28
+      - max: 32
+  samplingRate:
+    and:
+      - min: 44
+      - max: 48.8
+  channelS:
+    exact: 2
+  bitRate:
+    and:
+      - min: 192
+      - max: 320
