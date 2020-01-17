@@ -1,7 +1,7 @@
 <?php
 
-function analyze($i) {
-  $file_name = "test-$i.mp4";
+function analyze($i, $type = 'mp4') {
+  $file_name = "test-$i.$type";
   $file = '/videos/' . $file_name;
   if (file_exists($file)) {
     $header = 'General info';
@@ -58,7 +58,7 @@ function analyze($i) {
       $info['ffprobe'] = $frames;
     }
     
-    $json_file = '/videos/' . str_replace('.mp4', '.json', $file_name);
+    $json_file = '/videos/' . str_replace(['.mp4', '.ts'], '.json', $file_name);
     file_put_contents($json_file, json_encode($info));
   }
 }
