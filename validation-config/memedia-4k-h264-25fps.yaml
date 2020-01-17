@@ -13,8 +13,8 @@ video:
   formatProfile:
     and:
       - or:
-        - contains: 5.1
-        - contains: 4.1
+        - contains: 5
+        - contains: 4
       - contains: high
   duration:
     and:
