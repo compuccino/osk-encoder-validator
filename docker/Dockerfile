@@ -22,3 +22,8 @@ RUN cd /root/ffmpeg && \
 
 COPY config/ports.conf /etc/apache2/
 COPY config/app.conf /etc/apache2/sites-enabled/
+
+RUN mkdir /videos
+RUN mkdir /validation-config
+
+COPY config/entrypoint.sh /sbin/entrypoint.sh
