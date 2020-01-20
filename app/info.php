@@ -120,6 +120,11 @@
             </script>
         </div>
       </div>
+      <div class="row justify-content-center">
+        <div class="col-lg-12 text-center">
+          This project is created by <a href="https://oskberlin.com/" target="_blank">OSK Berlin</a> and is licensed under the GPLv3 license and is provided as is without warranty.
+        </div>
+      </div>
       <script src="/js/info-logic.js"></script>
   </body>
 </html>
