@@ -8,7 +8,7 @@ $i = count(glob('/videos/*.mp4'))+1;
 // Tell everyone we are listening
 file_put_contents('/tmp/listening-rtmp', TRUE);
 
-exec('ffmpeg -f flv -listen 1 -i "rtmp://127.0.0.1:6872" -t 30 -c:v copy -c:a copy -strict -2 -y -f mpegts /videos/test-' . $i . '.flv');
+exec('ffmpeg -f flv -listen 1 -i "rtmp://0.0.0.0:6872" -t 30 -c:v copy -c:a copy -strict -2 -y -f mpegts /videos/test-' . $i . '.flv');
 
 exec('ffmpeg -i /videos/test-' . $i . '.flv -c copy /videos/test-' . $i . '.mp4');
 unlink('/videos/test-' . $i . '.flv');
