@@ -1,6 +1,6 @@
 version: '3.5'
 services:
-  harmancc_mysql:
+  encoder_validator:
     image: registry.oskdev.de:5000/encoder-validator
     container_name: encoder-validator
     hostname: encoder-validator
