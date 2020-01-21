@@ -15,7 +15,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Encoder Information</title>
+    <title>OSK Encoder Validator</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet">
     <script src="/js/jquery.min.js"></script>
@@ -25,7 +25,7 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
-          <h1>Encoder Information</h1>
+          <h1>OSK Encoder Validator</h1>
         </div>
       </div>
       <div class="row">
