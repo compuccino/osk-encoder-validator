@@ -58,6 +58,7 @@
             <hr/>
             <h2>Frame-by-Frame Information</h2>
             <hr/>
+            <?php $test->testFrames($info['ffprobe']); ?>
             <?php foreach($info['ffprobe'] as $header => $data) { ?>
               <h5><?php echo ucfirst($header); ?> Streams</h5>
               <?php foreach($data as $stream_id => $stream_data) { ?>

@@ -152,4 +152,113 @@ class test {
   function notExact($value, $testValue) {
     return strtolower((string) $value) == strtolower((string) $testValue) ? FALSE : TRUE;
   }
+
+  // Test frames
+  function testFrames($frames) {
+    $this->testKeyFrames($frames);
+    $this->testDtsPtsAlignment($frames);
+    $this->testDtsPtsStart($frames);
+    $this->testFrameOrder($frames);
+  }
+
+  // Test keyframes
+  function testKeyFrames($frames) {
+    if (isset($this->validateValues['framesKeyFrameDistance'])) {
+      foreach ($frames['video'] as $key => $frameInfo) {
+        $i = 0;
+        $longestInterval = 0;
+        $shortestInterval = NULL;
+        foreach ($frameInfo as $frame) {
+          if ($frame['key_frame']) {
+            if ($i > $longestInterval) {
+              $longestInterval = $i;
+            }
+            if ($shortestInterval == NULL || $i && $i < $shortestInterval) {
+              $shortestInterval = $i;
+            }
+            $i = 1;
+          } else {
+            $i++;
+          }
+        }
+        
+        $class = "table-success";
+        $message = "The shortest interval between video key frames on stream #$key was $shortestInterval and the longest $longestInterval.";
+        $adds = [];
+        if ($this->validateValues['framesKeyFrameDistance']['min'] > $shortestInterval) {
+          $adds[] = "The shortest value should be minimum " . $this->validateValues['framesKeyFrameDistance']['min'];
+          $class = "table-danger";
+        }
+
+        if ($this->validateValues['framesKeyFrameDistance']['max'] < $longestInterval) {
+          $adds[] = "The longest value should be maximum " . $this->validateValues['framesKeyFrameDistance']['max'];
+          $class = "table-danger";
+        }
+
+        $message .= ' ' . ucfirst(implode(' and ', $adds));
+
+        echo "<table class=\"table table-hover table-striped\"><tr class=\"$class\"><td>$message</td></tr></table>";
+      }
+    }
+  }
+
+  function testDtsPtsAlignment($frames) {
+    if (isset($this->validateValues['framesDtsPtsDiff'])) {
+      foreach ($frames['video'] as $key => $frameInfo) {
+        $message = "The longest diff between DTS and PTS on stream #$key allowed is " . $this->validateValues['framesDtsPtsDiff'] . '.';
+        foreach ($frameInfo as $frameNr => $frame) {
+          if ($frame['pkt_dts_time'] !== 'N/A' && $frame['pkt_pts_time'] !== 'N/A') {
+            $timeDiff = round(abs($frame['pkt_pts_time']-$frame['pkt_dts_time']), 6);
+            if ($timeDiff > $this->validateValues['framesDtsPtsDiff']) {
+              $errorMessage = "Frame $frameNr is $timeDiff off.";
+              echo "<table class=\"table table-hover table-striped\"><tr class=\"table-danger\"><td>$message $errorMessage<td></td></tr></table>";
+              return;
+            }
+          }
+        }
+        echo "<table class=\"table table-hover table-striped\"><tr class=\"table-success\"><td>$message<td></td></tr></table>";
+      }
+    }
+  }
+
+  function testDtsPtsStart($frames) {
+    if (isset($this->validateValues['framesDtsPtsStartMax'])) {
+      $message = "DTS and PTS start time should be lower then " . $this->validateValues['framesDtsPtsStartMax'] . '.';
+      foreach ($frames['video'] as $key => $frameInfo) {
+        $adds = [];
+        $class = "table-success";
+        if ($frameInfo[0]['pkt_pts_time'] > $this->validateValues['framesDtsPtsStartMax']) {
+          $adds[] = " PTS on stream #$key is larger at " . $frameInfo[0]['pkt_pts_time'];
+          $class = "table-danger";
+        }
+        if ($frameInfo[0]['pkt_dts_time'] > $this->validateValues['framesDtsPtsStartMax']) {
+          $adds[] = " DTS on stream #$key is larger at " . $frameInfo[0]['pkt_dts_time'];
+          $class = "table-danger";
+        }
+        $message .= ' ' . ucfirst(implode(' and ', $adds));
+        echo "<table class=\"table table-hover table-striped\"><tr class=\"$class\"><td>$message<td></td></tr></table>";
+      }
+    }
+  }
+
+  function testFrameOrder($frames) {
+    if (isset($this->validateValues['framesFrameOrder'])) {
+      $message = "The frame order should be " . $this->validateValues['framesFrameOrder'] . '.';
+      foreach ($frames['video'] as $key => $frameInfo) {
+        foreach ($frameInfo as $frameNr => $frame) {
+          if ($frame['key_frame']) {
+            $start = strtoupper(substr($this->validateValues['framesFrameOrder'], 1));
+          } else if ($start) {
+            $next = substr($start, 0, 1);
+            if ($next != $frame['pict_type']) {
+              echo "<table class=\"table table-hover table-striped\"><tr class=\"table-danger\"><td>$message We saw another pattern in video stream #$key.<td></td></tr></table>";
+              return;
+            }
+            $start = substr($start, 1);
+          }
+        }
+      }
+      echo "<table class=\"table table-hover table-striped\"><tr class=\"table-success\"><td>$message<td></td></tr></table>";
+    }
+  }
 }

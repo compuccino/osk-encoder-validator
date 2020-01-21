@@ -1,7 +1,7 @@
 general:
   fileSize:
     and:
-      - min: 70
+      - min: 50
       - max: 90
 video:
   format:
@@ -19,7 +19,7 @@ video:
   duration:
     and:
       - min: 28
-      - max: 32
+      - max: 40
   bitRateMode:
     exact: constant
   bitRate:
@@ -36,21 +36,36 @@ video:
       - max: 30
   minimumFrameRate:
     and:
-      - min: 28
+      - min: 27
       - max: 30
   maximumFrameRate:
     and:
       - min: 30
-      - max: 32
+      - max: 33
   colorSpace:
     contains: yuv
   chromaSubsampling:
     exact: "4:2:0"
+  encodingSettings:
+    and:
+      - contains: keyint=60
+      - contains: bitrate=22000
+      - contains: cabac=1
+      - contains: scenecut=0
+      - contains: rc=cbr
+  bitDepth:
+    exact: 8 bits
+  scanType:
+    exact: progressive
 audio:
   format:
     and:
       - contains: aac
-      - not-exact: hd-aac
+  formatProfile:
+    or:
+      - exact: lc
+      - exact: hev1
+      - exact: hev2
   duration:
     and:
       - min: 28
@@ -65,3 +80,11 @@ audio:
     and:
       - min: 192
       - max: 320
+# Frames is a special solution with it's own rules
+frames:
+  keyFrameDistance:
+    min: 59
+    max: 60
+  dtsPtsDiff: 1
+  dtsPtsStartMax: 2
+  frameOrder: IBBBP
