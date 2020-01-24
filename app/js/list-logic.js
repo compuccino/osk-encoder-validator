@@ -58,7 +58,7 @@ function checkList() {
       html = html + '<div class="btn-group" role="group"><button id="btnGroupDrop' + row.number + '" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
       html = html + '</button><div class="dropdown-menu" aria-labelledby="btnGroupDrop' + row.number + '">';
       for (validation of json.validations) {
-        html = html + '<a class="dropdown-item" href="' + link + '&validate=' + validation + '">' + validation + '</a>';
+        html = html + '<a class="dropdown-item" href="' + link + '&validate=' + validation + '">Test against <strong>' + validation + '</strong></a>';
       }
       html = html + '</div></div></div></td></tr>';
     }

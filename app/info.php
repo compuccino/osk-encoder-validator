@@ -15,7 +15,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Encoder Information</title>
+    <title>OSK Encoder Validator</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/style.css" rel="stylesheet">
     <script src="/js/jquery.min.js"></script>
@@ -25,7 +25,7 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-12">
-          <h1>Encoder Information</h1>
+          <h1>OSK Encoder Validator</h1>
         </div>
       </div>
       <div class="row">
@@ -58,6 +58,7 @@
             <hr/>
             <h2>Frame-by-Frame Information</h2>
             <hr/>
+            <?php $test->testFrames($info['ffprobe']); ?>
             <?php foreach($info['ffprobe'] as $header => $data) { ?>
               <h5><?php echo ucfirst($header); ?> Streams</h5>
               <?php foreach($data as $stream_id => $stream_data) { ?>
@@ -118,6 +119,11 @@
             <script>
               var info=<?php echo json_encode($info); ?>;
             </script>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-lg-12 text-center">
+          This project is created by <a href="https://oskberlin.com/" target="_blank">OSK Berlin</a> and is licensed under the GPLv3 license and is provided as is without warranty.
         </div>
       </div>
       <script src="/js/info-logic.js"></script>

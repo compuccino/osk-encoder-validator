@@ -58,3 +58,8 @@ audio:
     and:
       - min: 192
       - max: 320
+# Frames is a special solution with it's own rules
+frames:
+  keyFrameDistance:
+    min: 10
+    max: 55

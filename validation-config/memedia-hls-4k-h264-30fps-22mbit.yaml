@@ -1,0 +1,123 @@
+general:
+  format:
+    exact: mpeg-4
+  codecID:
+    or:
+      - contains: isom
+  fileSize:
+    and:
+      - min: 50
+      - max: 90
+  overallBitRate:
+    and:
+      - min: 20
+      - max: 25
+video:
+  format:
+    and:
+      - or:
+        - exact: avc
+        - exact: h264
+      - not-exact: av1
+  formatProfile:
+    and:
+      - or:
+        - contains: 5
+        - contains: 4
+      - contains: high
+  duration:
+    and:
+      - min: 28
+      - max: 40
+  bitRateMode:
+    exact: constant
+  bitRate:
+    and:
+      - min: 20
+      - max: 24
+  width:
+    exact: 3840
+  height:
+    exact: 2160
+  formatSettingsCABAC:
+    exact: "yes"
+  formatSettingsGOP:
+    or:
+      - contains: n=60
+  codecID:
+    or:
+      - exact: avc1
+  codecIDInfo:
+    or:
+      - exact: advanced video coding
+  displayAspectRatio:
+    exact: "16:9"
+  frameRate:
+    and:
+      - min: 29.970
+      - max: 30
+  frameRateMode:
+    or:
+      - exact: variable
+      - exact: constant
+  minimumFrameRate:
+    and:
+      - min: 27
+      - max: 30
+  maximumFrameRate:
+    and:
+      - min: 30
+      - max: 33
+  colorSpace:
+    contains: yuv
+  chromaSubsampling:
+    exact: "4:2:0"
+  encodingSettings:
+    and:
+      - contains: keyint=60
+      - contains: bitrate=22000
+      - contains: cabac=1
+      - contains: scenecut=0
+      - contains: rc=cbr
+  bitDepth:
+    exact: 8 bits
+  scanType:
+    exact: progressive
+audio:
+  format:
+    and:
+      - contains: aac
+  formatInfo:
+    or:
+      - exact: advanced audio codec
+  formatProfile:
+    or:
+      - exact: lc
+      - exact: hev1
+      - exact: hev2
+  duration:
+    and:
+      - min: 28
+      - max: 32
+  samplingRate:
+    and:
+      - min: 44
+      - max: 48.8
+  channelPositions:
+    exact: "front: l r"
+  channelS:
+    exact: 2
+  compressionMode:
+    exact: lossy
+  bitRate:
+    and:
+      - min: 192
+      - max: 320
+# Frames is a special solution with it's own rules
+frames:
+  keyFrameDistance:
+    min: 59
+    max: 60
+  dtsPtsDiff: 1
+  dtsPtsStartMax: 2
+  frameOrder: IBBBP
