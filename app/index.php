@@ -40,13 +40,50 @@
             <p id="message">Checking...</p>
           </div>
           <button type="button" id="cancel-test" class="btn btn-danger btn-lg btn-block">Cancel test/listening</button>
-          <button type="button" id="test-srt" disabled class="btn btn-primary btn-lg btn-block">Test using SRT</button>
-          <button type="button" id="test-rtmp" disabled class="btn btn-primary btn-lg btn-block">Test using RTMP</button>
+          <button type="button" id="test-srt" disabled class="btn btn-primary btn-lg btn-block">SRT Listener</button>
+          <button type="button" id="test-rtmp" disabled class="btn btn-primary btn-lg btn-block">RTMP Push</button>
+          <button type="button" id="test-rtmp-pull" disabled class="btn btn-primary btn-lg btn-block">RTMP Pull</button>
+          <button type="button" id="test-hls-pull" disabled class="btn btn-primary btn-lg btn-block">HLS Pull</button>
         </div>
       </div>
       <div class="row justify-content-center">
         <div class="col-lg-12 text-center">
           This project is created by <a href="https://oskberlin.com/" target="_blank">OSK Berlin</a> and is licensed under the GPLv3 license and is provided as is without warranty.
+        </div>
+      </div>
+      <div class="modal" id="frameModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <h4 class="modal-title">Frame Info</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="url">URL*</label>
+                <input type="text" class="form-control" id="url" aria-describedby="urlHelp" />
+                <div id="urlHelp"></div>
+              </div>
+              <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" aria-describedby="usernameHelp" />
+                <small id="usernameHelp" class="form-text text-muted">Only add if you want to bypass basic auth</small>
+              </div>
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" aria-describedby="passwordHelp" />
+                <small id="passwordHelp" class="form-text text-muted">Only add if you want to bypass basic auth</small>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" id="validate-stream" class="btn btn-primary">Validate</button>  
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+          </div>
         </div>
       </div>
       <script src="/js/list-logic.js"></script>
