@@ -1,3 +1,4 @@
+<?php include('includes/authorize.php'); ?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -40,8 +41,10 @@
             <p id="message">Checking...</p>
           </div>
           <button type="button" id="cancel-test" class="btn btn-danger btn-lg btn-block">Cancel test/listening</button>
-          <button type="button" id="test-srt" disabled class="btn btn-primary btn-lg btn-block">Test using SRT</button>
-          <button type="button" id="test-rtmp" disabled class="btn btn-primary btn-lg btn-block">Test using RTMP</button>
+          <button type="button" id="test-srt" disabled class="btn btn-primary btn-lg btn-block">SRT Listener</button>
+          <button type="button" id="test-rtmp" disabled class="btn btn-primary btn-lg btn-block">RTMP Push</button>
+          <button type="button" id="test-rtmp-pull" disabled class="btn btn-primary btn-lg btn-block">RTMP Pull</button>
+          <button type="button" id="test-hls-pull" disabled class="btn btn-primary btn-lg btn-block">HLS Pull</button>
         </div>
       </div>
       <div class="row justify-content-center">
@@ -49,6 +52,82 @@
           This project is created by <a href="https://oskberlin.com/" target="_blank">OSK Berlin</a> and is licensed under the GPLv3 license and is provided as is without warranty.
         </div>
       </div>
+      <div class="modal" id="frameModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <div class="modal-header">
+              <h4 class="modal-title">Frame Info</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="url">URL*</label>
+                <input type="text" class="form-control" id="url" aria-describedby="urlHelp" />
+                <div id="urlHelp"></div>
+              </div>
+              <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" id="username" aria-describedby="usernameHelp" />
+                <small id="usernameHelp" class="form-text text-muted">Only add if you want to bypass basic auth</small>
+              </div>
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" aria-describedby="passwordHelp" />
+                <small id="passwordHelp" class="form-text text-muted">Only add if you want to bypass basic auth</small>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" id="validate-stream" class="btn btn-primary">Validate</button>  
+              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="modal" id="basicAuthModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Set new username & password</h4>
+            </div>
+
+            <div class="modal-body">
+              <p>You are currently using <strong>oskberlin/admin</strong> as credentials for the validator. Please give a new username and password.</p>
+              <div class="form-group">
+                <label for="basic-auth-username">Username*</label>
+                <input type="text" class="form-control" id="basic-auth-username" aria-describedby="urlHelp" />
+                <div id="basic-auth-username-help"></div>
+              </div>
+              <div class="form-group">
+                <label for="basic-auth-password">Password*</label>
+                <input type="password" class="form-control" id="basic-auth-password" aria-describedby="urlHelp" />
+                <div id="basic-auth-password-help"></div>
+              </div>
+              <div class="form-group">
+                <label for="basic-auth-password-validate">Password (again)*</label>
+                <input type="password" class="form-control" id="basic-auth-password-validate" aria-describedby="urlHelp" />
+                <div id="basic-auth-password-validate-help"></div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" id="set-credentials" class="btn btn-primary">Set new credentials</button>  
+            </div>
+          </div>
+        </div>
+      </div>
+      <?php
+        // Only load admin if it's the standard
+        if (file_get_contents('/htpasswd/.htpasswd') == 'oskberlin:YWG41BPzVAkN6') {
+      ?>
+        <script>$('#basicAuthModal').modal({backdrop: 'static', keyboard: false}).modal('show');</script>
+      <?php
+        }
+      ?>
       <script src="/js/list-logic.js"></script>
   </body>
 </html>
