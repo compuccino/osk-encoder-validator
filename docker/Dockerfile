@@ -30,3 +30,4 @@ COPY config/.htpasswd /htpasswd
 RUN chown -R www-data:www-data /htpasswd
 
 COPY config/entrypoint.sh /sbin/entrypoint.sh
+COPY app /var/www/app
