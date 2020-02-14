@@ -1,3 +1,7 @@
+var lastStatus = false;
+var lastFetchAmount = 0;
+var waitingForNew = false;
+
 $(document).ready(function() {
   checkStatus(true);
   checkList();
@@ -118,6 +122,10 @@ function cancelTest() {
 function checkList() {
   $.getJSON("/list.php", function( json ) {
     var html = '';
+    if (waitingForNew) {
+      html = html + '<tr><td colspan="3">Processing a new video, have patience.<br><div class="bs-component"><div class="progress">';
+      html = html + '<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 10%"></div></div></div></td></tr>';
+    }
     for (row of json.list) {
       var link = '/info.php?id=' + row.number;
       html = html + '<tr><td>' + row.number + '</td><td>' + row.date + '</td><td>';
@@ -129,8 +137,13 @@ function checkList() {
       }
       html = html + '</div></div></div></td></tr>';
     }
-    $('#result-set tbody').html(html);
-    setTimeout(checkList, 20000);
+    if (lastFetchAmount !== json.list.length || waitingForNew) {
+      waitingForNew = false;
+      $('#result-set tbody').html(html);
+    }
+    
+    lastFetchAmount = json.list.length;
+    setTimeout(checkList, 4000);
   });
 }
 
@@ -149,11 +162,11 @@ function checkStatus(first) {
     }
     if (json.listening === true && json.running === false && json.listening_format == 'rtmp') {
       activeStream();
-      $('#message').html('Listening to rtmp on <strong>rtmp://' + window.location.hostname + ':6872</strong>. Please stream to this when ready.');
+      $('#message').html('Listening to rtmp on <strong>rtmp://' + window.location.hostname + ':6872/test/live</strong>. Please stream to this when ready.');
     }
     if (json.listening === true && json.running === true) {
       activeStream();
-      $('#message').html('Currently streaming/reading. It will run for 30 seconds before we validate the stream.');
+      $('#message').html('Currently streaming/reading. It will run for 30 seconds or shorter before we validate the stream.');
     }
     if (json.listening === false && json.running === true) {
       activeStream();
@@ -166,6 +179,11 @@ function checkStatus(first) {
       $('#test-hls-pull').attr('disabled', false);
       $('#test-srt').attr('disabled', false);
     }
+
+    if (lastStatus && !json.running) {
+      waitingForNew = true;
+    }
+    lastStatus = json.running;
     setTimeout(checkStatus, 500);
   });
 }
