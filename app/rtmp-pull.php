@@ -1,5 +1,6 @@
 <?php
 
+include('includes/authorize.php');
 include('includes/analyze.php');
 set_time_limit(0);
 
@@ -15,8 +16,6 @@ if ($username && $password) {
 
 // Tell everyone we are listening
 file_put_contents('/tmp/listening-rtmp-pull', TRUE);
-echo 'ffmpeg -i "' . $url . '" -c:v copy -c:a copy -strict -2 -y -t 30 -f mpegts /videos/test-' . $i . '.flv';
-exit;
 exec('ffmpeg -i "' . $url . '" -c:v copy -c:a copy -strict -2 -y -t 30 -f mpegts /videos/test-' . $i . '.flv');
 
 exec('ffmpeg -i /videos/test-' . $i . '.flv -c copy /videos/test-' . $i . '.mp4');

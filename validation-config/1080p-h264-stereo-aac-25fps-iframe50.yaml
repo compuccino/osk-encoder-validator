@@ -1,0 +1,25 @@
+video:
+  format:
+    and:
+      - or:
+        - exact: avc
+        - exact: h264
+      - not-exact: av1
+  width:
+    exact: 1920
+  height:
+    exact: 1080
+  frameRate:
+    exact: 25
+audio:
+  format:
+    and:
+      - contains: aac
+      - not-exact: hd-aac
+  channelS:
+    exact: 2
+# Frames is a special solution with it's own rules
+frames:
+  keyFrameDistance:
+    min: 50
+    max: 50

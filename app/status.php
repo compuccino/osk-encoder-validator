@@ -1,5 +1,7 @@
 <?php
 
+include('includes/authorize.php');
+
 $output = [
   'listening' => FALSE,
   'running' => FALSE,
@@ -16,7 +18,7 @@ if (file_exists('/tmp/listening-rtmp')) {
 }
 if (file_exists('/tmp/listening-rtmp-pull')) {
   $output['listening'] = TRUE;
-  $output['listening_format'] = 'rtmp';
+  $output['listening_format'] = 'rtmp-pull';
 }
 if (file_exists('/tmp/listening-hls-pull')) {
   $output['listening'] = TRUE;

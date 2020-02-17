@@ -1,3 +1,4 @@
+<?php include('includes/authorize.php'); ?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -86,6 +87,47 @@
           </div>
         </div>
       </div>
+
+      <div class="modal" id="basicAuthModal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Set new username & password</h4>
+            </div>
+
+            <div class="modal-body">
+              <p>You are currently using <strong>oskberlin/admin</strong> as credentials for the validator. Please give a new username and password.</p>
+              <div class="form-group">
+                <label for="basic-auth-username">Username*</label>
+                <input type="text" class="form-control" id="basic-auth-username" aria-describedby="urlHelp" />
+                <div id="basic-auth-username-help"></div>
+              </div>
+              <div class="form-group">
+                <label for="basic-auth-password">Password*</label>
+                <input type="password" class="form-control" id="basic-auth-password" aria-describedby="urlHelp" />
+                <div id="basic-auth-password-help"></div>
+              </div>
+              <div class="form-group">
+                <label for="basic-auth-password-validate">Password (again)*</label>
+                <input type="password" class="form-control" id="basic-auth-password-validate" aria-describedby="urlHelp" />
+                <div id="basic-auth-password-validate-help"></div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" id="set-credentials" class="btn btn-primary">Set new credentials</button>  
+            </div>
+          </div>
+        </div>
+      </div>
+      <?php
+        // Only load admin if it's the standard
+        if (file_get_contents('/htpasswd/.htpasswd') == 'oskberlin:YWG41BPzVAkN6') {
+      ?>
+        <script>$('#basicAuthModal').modal({backdrop: 'static', keyboard: false}).modal('show');</script>
+      <?php
+        }
+      ?>
       <script src="/js/list-logic.js"></script>
   </body>
 </html>

@@ -25,5 +25,9 @@ COPY config/app.conf /etc/apache2/sites-enabled/
 
 RUN mkdir /videos
 RUN mkdir /validation-config
+RUN mkdir /htpasswd
+COPY config/.htpasswd /htpasswd
+RUN chown -R www-data:www-data /htpasswd
 
 COPY config/entrypoint.sh /sbin/entrypoint.sh
+COPY app /var/www/app

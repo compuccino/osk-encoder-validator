@@ -1,3 +1,7 @@
+var lastStatus = false;
+var lastFetchAmount = 0;
+var waitingForNew = false;
+
 $(document).ready(function() {
   checkStatus(true);
   checkList();
@@ -16,6 +20,9 @@ $(document).ready(function() {
   $('#cancel-test').on('click', function() {
     cancelTest();
   })
+  $('#set-credentials').on('click', function() {
+    setNewCredentials();
+  });
 });
 
 function testSrt() {
@@ -115,6 +122,10 @@ function cancelTest() {
 function checkList() {
   $.getJSON("/list.php", function( json ) {
     var html = '';
+    if (waitingForNew) {
+      html = html + '<tr><td colspan="3">Processing a new video, have patience.<br><div class="bs-component"><div class="progress">';
+      html = html + '<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 10%"></div></div></div></td></tr>';
+    }
     for (row of json.list) {
       var link = '/info.php?id=' + row.number;
       html = html + '<tr><td>' + row.number + '</td><td>' + row.date + '</td><td>';
@@ -126,8 +137,13 @@ function checkList() {
       }
       html = html + '</div></div></div></td></tr>';
     }
-    $('#result-set tbody').html(html);
-    setTimeout(checkList, 20000);
+    if (lastFetchAmount !== json.list.length || waitingForNew) {
+      waitingForNew = false;
+      $('#result-set tbody').html(html);
+    }
+    
+    lastFetchAmount = json.list.length;
+    setTimeout(checkList, 4000);
   });
 }
 
@@ -146,11 +162,11 @@ function checkStatus(first) {
     }
     if (json.listening === true && json.running === false && json.listening_format == 'rtmp') {
       activeStream();
-      $('#message').html('Listening to rtmp on <strong>rtmp://' + window.location.hostname + ':6872</strong>. Please stream to this when ready.');
+      $('#message').html('Listening to rtmp on <strong>rtmp://' + window.location.hostname + ':6872/test/live</strong>. Please stream to this when ready.');
     }
     if (json.listening === true && json.running === true) {
       activeStream();
-      $('#message').html('Currently streaming/reading. It will run for 30 seconds before we validate the stream.');
+      $('#message').html('Currently streaming/reading. It will run for 30 seconds or shorter before we validate the stream.');
     }
     if (json.listening === false && json.running === true) {
       activeStream();
@@ -163,6 +179,11 @@ function checkStatus(first) {
       $('#test-hls-pull').attr('disabled', false);
       $('#test-srt').attr('disabled', false);
     }
+
+    if (lastStatus && !json.running) {
+      waitingForNew = true;
+    }
+    lastStatus = json.running;
     setTimeout(checkStatus, 500);
   });
 }
@@ -183,4 +204,49 @@ function nonActiveStream() {
   $('#test-rtmp-pull').show();
   $('#test-hls-pull').show();
   $('#cancel-test').hide();
+}
+
+function setNewCredentials() {
+  var credValidation = true;
+  $('#basic-auth-password-help').removeClass('invalid-feedback');
+  $('#basic-auth-password').removeClass('is-invalid');
+  $('#basic-auth-password-validate-help').removeClass('invalid-feedback');
+  $('#basic-auth-password-validate-help').html('');
+  $('#basic-auth-password-validate').removeClass('is-invalid');
+  $('#basic-auth-password-help').html('');
+  $('#basic-auth-username-help').removeClass('invalid-feedback');
+  $('#basic-auth-username').removeClass('is-invalid');
+  $('#basic-auth-username-help').html('');
+
+  if ($('#basic-auth-username').val() == '') {
+    credValidation = false;
+    $('#basic-auth-username-help').addClass('invalid-feedback');
+    $('#basic-auth-username').addClass('is-invalid');
+    $('#basic-auth-username-help').html('You need to fill out this');
+  }
+  if ($('#basic-auth-password').val() == '') {
+    credValidation = false;
+    $('#basic-auth-password-help').addClass('invalid-feedback');
+    $('#basic-auth-password').addClass('is-invalid');
+    $('#basic-auth-password-help').html('You need to fill out this');
+  }
+  if ($('#basic-auth-password-validate').val() == '') {
+    credValidation = false;
+    $('#basic-auth-password-validate-help').addClass('invalid-feedback');
+    $('#basic-auth-password-validate').addClass('is-invalid');
+    $('#basic-auth-password-validate-help').html('You need to fill out this');
+  }
+  if ($('#basic-auth-password-validate').val() !== $('#basic-auth-password').val()) {
+    credValidation = false;
+    $('#basic-auth-password-validate-help').addClass('invalid-feedback');
+    $('#basic-auth-password-validate').addClass('is-invalid');
+    $('#basic-auth-password-validate-help').html('Passwords needs to match');
+  }
+  if (credValidation == true) {
+    $.getJSON("/credentials.php?username=" + $('#basic-auth-username').val() + '&password=' + $('#basic-auth-password').val(), function( json ) {
+      if (json.status) {
+        $('#basicAuthModal').modal('hide');
+      }
+    });
+  }
 }

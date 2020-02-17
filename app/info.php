@@ -1,4 +1,5 @@
 <?php
+  include('includes/authorize.php');
   include('includes/test.php');
   if (!isset($_GET['id']) || !file_exists('/videos/test-' . $_GET['id'] . '.json')) {
     echo "This is not a valid run";

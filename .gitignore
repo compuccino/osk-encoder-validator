@@ -1,3 +1,4 @@
 /videos/*.mp4
 /videos/*.ts
 /videos/*.json
+/docker/app
