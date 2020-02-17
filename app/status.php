@@ -1,5 +1,7 @@
 <?php
 
+include('includes/authorize.php');
+
 $output = [
   'listening' => FALSE,
   'running' => FALSE,

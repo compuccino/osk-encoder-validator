@@ -1,5 +1,6 @@
 <?php
 
+include('includes/authorize.php');
 include('includes/analyze.php');
 set_time_limit(0);
 

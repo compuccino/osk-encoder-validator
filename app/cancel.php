@@ -1,5 +1,6 @@
 <?php
 
+include('includes/authorize.php');
 exec('killall -9 ffmpeg');
 if (count(glob('/videos/*.mp4')) != count(glob('/videos/*.json'))) {
   foreach (glob('/videos/*.mp4') as $file) {

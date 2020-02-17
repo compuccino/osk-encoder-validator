@@ -1,5 +1,7 @@
 <?php
 
+include('includes/authorize.php');
+
 $list = [];
 foreach (glob('/videos/*.json') as $file) {
   $info = json_decode(file_get_contents($file), TRUE);

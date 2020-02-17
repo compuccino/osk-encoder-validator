@@ -1,5 +1,7 @@
 <?php
 
+include('includes/authorize.php');
+
 // Only allow to set initially
 if (file_get_contents('/htpasswd/.htpasswd') == 'oskberlin:YWG41BPzVAkN6') {
   $username = isset($_GET['username']) ? $_GET['username'] : exit;
