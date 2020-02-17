@@ -7,6 +7,12 @@ $(document).ready(function() {
   $('#test-rtmp').on('click', function() {
     testRtmp();
   });
+  $('#test-rtmp-pull').on('click', function() {
+    modalRtmpPull();
+  });
+  $('#test-hls-pull').on('click', function() {
+    modalHlsPull();
+  });
   $('#cancel-test').on('click', function() {
     cancelTest();
   })
@@ -34,6 +40,64 @@ function testRtmp() {
     },
     timeout: 100
   });
+}
+
+function modalHlsPull() {
+  pullModal();
+  $('#validate-stream').off('click').on('click', testHlsPull);
+}
+
+function modalRtmpPull() {
+  pullModal();
+  $('#validate-stream').off('click').on('click', testRtmpPull);
+}
+
+function testHlsPull() {
+  if ($('#url').val() == '') {
+    $('#urlHelp').addClass('invalid-feedback');
+    $('#url').addClass('is-invalid');
+    $('#urlHelp').html('Please give a valid HLS stream.')
+  } else {
+    $.ajax({
+      url: "/hls-pull.php?url=" + $('#url').val() + '&username=' + $('#username').val() + '&password=' + $('#password').val(),
+      error: function(){
+        $('#frameModal').modal('hide');
+      },
+      success: function(){
+        $('#frameModal').modal('hide');
+      },
+      timeout: 100
+    });
+  }
+}
+
+function testRtmpPull() {
+  if ($('#url').val() == '') {
+    $('#urlHelp').addClass('invalid-feedback');
+    $('#url').addClass('is-invalid');
+    $('#urlHelp').html('Please give a valid RTMP stream.')
+  } else {
+    $.ajax({
+      url: "/rtmp-pull.php?url=" + $('#url').val() + '&username=' + $('#username').val() + '&password=' + $('#password').val(),
+      error: function(){
+        $('#frameModal').modal('hide');
+      },
+      success: function(){
+        $('#frameModal').modal('hide');
+      },
+      timeout: 100
+    });
+  }
+}
+
+function pullModal() {
+  $('#urlHelp').html('')
+  $('#urlHelp').removeClass('invalid-feedback');
+  $('#url').removeClass('is-invalid');
+  $('#url').val('');
+  $('#username').val('');
+  $('#password').val('');
+  $('#frameModal').modal('show');
 }
 
 function cancelTest() {
@@ -74,19 +138,19 @@ function checkStatus(first) {
   $.getJSON("/status.php", function( json ) {
     if (json.listening === false && json.running === false) {
       nonActiveStream();
-      $('#message').html('Ready to start listening. Click the streaming protocol you want to use.');
+      $('#message').html('Ready to start listening/pulling. Click the streaming protocol you want to use.');
     }
     if (json.listening === true && json.running === false && json.listening_format == 'srt') {
       activeStream();
-      $('#message').html('Listening to srt on port <strong>6872</strong> to passcode <strong>1234567890123456</strong>. Please stream to this when ready.');
+      $('#message').html('Listening to srt on <strong>' + window.location.hostname + ':6872</strong> to passcode <strong>1234567890123456</strong>. Please stream to this when ready.');
     }
     if (json.listening === true && json.running === false && json.listening_format == 'rtmp') {
       activeStream();
-      $('#message').html('Listening to rtmp on port <strong>6872</strong>. Please stream to this when ready.');
+      $('#message').html('Listening to rtmp on <strong>rtmp://' + window.location.hostname + ':6872</strong>. Please stream to this when ready.');
     }
     if (json.listening === true && json.running === true) {
       activeStream();
-      $('#message').html('Currently streaming. Let it run for 30 seconds before we validate the stream.');
+      $('#message').html('Currently streaming/reading. It will run for 30 seconds before we validate the stream.');
     }
     if (json.listening === false && json.running === true) {
       activeStream();
@@ -95,6 +159,8 @@ function checkStatus(first) {
     }
     if (first) {
       $('#test-rtmp').attr('disabled', false);
+      $('#test-rtmp-pull').attr('disabled', false);
+      $('#test-hls-pull').attr('disabled', false);
       $('#test-srt').attr('disabled', false);
     }
     setTimeout(checkStatus, 500);
@@ -105,6 +171,8 @@ function activeStream() {
   $('#cancel-test').attr('disabled', false);
   $('#test-srt').hide();
   $('#test-rtmp').hide();
+  $('#test-rtmp-pull').hide();
+  $('#test-hls-pull').hide();
   $('#cancel-test').show();
 }
 
@@ -112,5 +180,7 @@ function nonActiveStream() {
   $('#cancel-test').attr('disabled', false);
   $('#test-srt').show();
   $('#test-rtmp').show();
+  $('#test-rtmp-pull').show();
+  $('#test-hls-pull').show();
   $('#cancel-test').hide();
 }

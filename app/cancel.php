@@ -25,3 +25,11 @@ if (file_exists('/tmp/listening-srt')) {
 if (file_exists('/tmp/listening-rtmp')) {
   unlink('/tmp/listening-rtmp');
 }
+
+if (file_exists('/tmp/listening-rtmp-pull')) {
+  unlink('/tmp/listening-rtmp-pull');
+}
+
+if (file_exists('/tmp/listening-hls-pull')) {
+  unlink('/tmp/listening-hls-pull');
+}

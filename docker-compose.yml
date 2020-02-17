@@ -1,7 +1,7 @@
 version: '3.5'
 services:
-  encoder_validator:
-    image: registry.oskdev.de:5000/encoder-validator
+  encoder_valiator:
+    image: compuccino/encoder-validator:latest
     container_name: encoder-validator
     hostname: encoder-validator
     network_mode: host
