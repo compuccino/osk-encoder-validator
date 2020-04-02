@@ -1,7 +1,7 @@
 version: '3.5'
 services:
   harmancc_mysql:
-    image: registry.oskdev.de:5000/encoder-validator
+    image: compuccino/encoder-validator
     container_name: encoder-validator
     hostname: encoder-validator
     network_mode: host
