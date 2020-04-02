@@ -4,12 +4,13 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 ENV NGINX_VERSION nginx-1.15.0
 ENV NGINX_RTMP_MODULE_VERSION 1.2.1
+ENV SRT_VERSION 1.4.1
 
 RUN mkdir /root/libsrt
 ADD libsrt /root/libsrt
 
 RUN apt-get -y update && \
-    apt-get install -y wget php-yaml nano mediainfo git build-essential yasm pkg-config ca-certificates openssl php-fpm \
+    apt-get install -y wget php-yaml nano mediainfo git build-essential yasm pkg-config ca-certificates openssl php-fpm tclsh cmake \
                        libssl-dev libchromaprint-dev frei0r-plugins-dev libmpg123-0 libmpg123-dev libgnutls28-dev libopencv-dev ladspa-sdk libiec61883-dev libavc1394-dev libass-dev libbluray-dev libbs2b-dev libcaca-dev libdc1394-22-dev libdrm-dev flite1-dev libgme-dev libgsm1-dev libmp3lame-dev libopencv-dev libopenjp2-7-dev libopus-dev libpulse-dev librsvg2-dev librubberband-dev libshine-dev libsnappy-dev libsoxr-dev libspeex-dev libtwolame-dev libssh-dev libtheora-dev libvorbis-dev libvpx-dev libwavpack-dev libwebp-dev libx265-dev libxml2-dev libxvidcore-dev libx264-dev libzvbi-dev libopenal-dev libglew-dev libomxil-bellagio-dev libcdio-paranoia-dev libsdl2-dev && \
     dpkg -i /root/libsrt/libsrt1_1.3.2-1_amd64.deb /root/libsrt/libsrt-dev_1.3.2-1_amd64.deb && \
     git clone https://github.com/FFmpeg/FFmpeg /root/ffmpeg && \
@@ -55,6 +56,14 @@ RUN cd /tmp/build/nginx/${NGINX_VERSION} && \
     make install && \
     mkdir /var/lock/nginx && \
     rm -rf /tmp/build
+
+RUN mkdir -p /srt && \
+    cd /srt && \
+    wget -O srt-${SRT_VERSION}.tar.gz https://github.com/Haivision/srt/archive/v${SRT_VERSION}.tar.gz && \
+    tar -zxf srt-${SRT_VERSION}.tar.gz && \
+    cd srt-${SRT_VERSION} && \
+    ./configure && \
+    make
 
 RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
     ln -sf /dev/stderr /var/log/nginx/error.log

@@ -19,6 +19,7 @@ foreach (glob('/videos/*.flv') as $file) {
 }
 
 if (file_exists('/tmp/listening-srt')) {
+  exec('killall -9 srt-live-transmit');
   unlink('/tmp/listening-srt');
 }
 
