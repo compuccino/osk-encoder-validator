@@ -1,7 +1,7 @@
 version: '3.5'
 services:
-  harmancc_mysql:
-    image: compuccino/encoder-validator
+  encoder_valiator:
+    image: compuccino/encoder-validator:latest
     container_name: encoder-validator
     hostname: encoder-validator
     network_mode: host
